@@ -8,8 +8,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = 'http://localhost:3000/api/dogs';
-  const BACKEND_BASE_URL = 'http://localhost:3000/';
+  const API_URL = process.env.REACT_APP_API_URL ? `${process.env.REACT_APP_API_URL}/api/dogs` : '/api/dogs';
 
   useEffect(() => {
     const fetchDogs = async () => {
@@ -44,6 +43,9 @@ const Home = () => {
         <Link to="/cadastro" className="btn btn-success">
           Cadastrar Novo Cachorro
         </Link>
+        <Link to="/lista" className="btn btn-primary ms-2">
+          Ver Lista (CRUD)
+        </Link>
       </div>
 
       {error && (
@@ -61,13 +63,9 @@ const Home = () => {
           {dogs.map((dog) => (
             <div key={dog._id || dog.id || Math.random()} className="col-md-4 mb-4">
               <div className="card shadow-sm h-100">
-                {dog.foto ? (
+                {dog.fotoUrl ? (
                   <img
-                    src={
-                      String(dog.foto).startsWith('http')
-                        ? dog.foto
-                        : `${BACKEND_BASE_URL}${String(dog.foto).replace(/\\/g, '/')}`
-                    }
+                    src={dog.fotoUrl}
                     className="card-img-top"
                     alt={dog.nome || 'Cachorro'}
                     style={{ height: '200px', objectFit: 'cover' }}
